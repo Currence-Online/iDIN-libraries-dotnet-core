@@ -1,0 +1,4 @@
+Release Notes BankId.Merchant.Library
+	
+v 1.2.1
+#121312 Create iDIN .NET Core Software Library

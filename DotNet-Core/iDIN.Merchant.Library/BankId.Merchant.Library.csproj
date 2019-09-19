@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Xml\idx.merchant-acquirer.1.0.xsd" />
+    <None Remove="Xml\Schemas\saml-schema-assertion-2.0.xsd" />
+    <None Remove="Xml\Schemas\saml-schema-authn-context-2.0.xsd" />
+    <None Remove="Xml\Schemas\saml-schema-metadata-2.0.xsd" />
+    <None Remove="Xml\Schemas\saml-schema-protocol-2.0.xsd" />
+    <None Remove="Xml\Schemas\xenc-schema.xsd" />
+    <None Remove="Xml\Schemas\xml.xsd" />
+    <None Remove="Xml\xmldsig-core-schema.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Xml\idx.merchant-acquirer.1.0.xsd" />
+    <EmbeddedResource Include="Xml\Schemas\saml-schema-assertion-2.0.xsd" />
+    <EmbeddedResource Include="Xml\Schemas\saml-schema-authn-context-2.0.xsd" />
+    <EmbeddedResource Include="Xml\Schemas\saml-schema-metadata-2.0.xsd" />
+    <EmbeddedResource Include="Xml\Schemas\saml-schema-protocol-2.0.xsd" />
+    <EmbeddedResource Include="Xml\Schemas\xenc-schema.xsd" />
+    <EmbeddedResource Include="Xml\Schemas\xml.xsd" />
+    <EmbeddedResource Include="Xml\xmldsig-core-schema.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <PackageReference Include="System.Security.Cryptography.Cng" Version="4.5.0" />
+    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="4.5.0" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
+</Project>
