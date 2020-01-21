@@ -6,6 +6,13 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;0114;0108</NoWarn>
+    <OutputPath>\bin\Debug\</OutputPath>
+    <DocumentationFile>\bin\Debug\netcoreapp2.2\BankId.Merchant.Library.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>\bin\Release\netcoreapp2.2\BankId.Merchant.Library.xml</DocumentationFile>
+    <OutputPath>\bin\Release\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,5 +46,5 @@
     <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="4.5.0" />
   </ItemGroup>
-  
+
 </Project>
