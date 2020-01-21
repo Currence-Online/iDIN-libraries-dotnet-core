@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<div class="jumbotron">
+    <h1>BankId Merchant Website - .NET Core</h1>
+    <p class="lead">This is a test website for the BankId Merchant Library. Available actions:</p>
+    <p>
+        @Html.ActionLink("Directory »", "Directory", "BankId", new { area = "" }, new { @class = "btn btn-primary btn-lg" })
+        @Html.ActionLink("Authenticate »", "AuthenticationRequest", "BankId", new { area = "" }, new { @class = "btn btn-primary btn-lg" })
+        @Html.ActionLink("Response »", "GetResponse", "BankId", new { area = "" }, new { @class = "btn btn-primary btn-lg" })
+    </p>
+</div>
