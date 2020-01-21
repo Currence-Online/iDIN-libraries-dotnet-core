@@ -1,4 +1,6 @@
-﻿namespace BankId.Merchant.Library
+﻿using System.Threading.Tasks;
+
+namespace BankId.Merchant.Library
 {
     /// <summary>
     /// ICommunicator interface, implemented by <see cref="Communicator"/>.
@@ -30,5 +32,31 @@
         ///     A StatusResponse object which contains the response from the server (transaction id, status message), or error information when an error occurs
         /// </returns>
         StatusResponse GetResponse(StatusRequest statusRequest);
+
+        /// <summary>
+        ///     Async version of GetDirectory method
+        /// </summary>
+        /// <returns>
+        ///     A DirectoryResponse object which contains the response from the server (a list of Issuers), or error information when an error occurs
+        /// </returns>
+        Task<DirectoryResponse> GetDirectoryAsync();
+
+        /// <summary>
+        ///    Async version of NewAuthenticationRequest
+        /// </summary>
+        /// <param name="authenticationRequest">An AuthenticationRequest object</param>
+        /// <returns>
+        ///     An AuthenticationResponse object which contains the response from the server (transaction id, issuer authentication URL), or error information when an error occurs
+        /// </returns>
+        Task<AuthenticationResponse> NewAuthenticationRequestAsync(AuthenticationRequest authenticationRequest);
+
+        /// <summary>
+        ///     Async version of GetResponse
+        /// </summary>
+        /// <param name="statusRequest">A StatusRequest object</param>
+        /// <returns>
+        ///     A StatusResponse object which contains the response from the server (transaction id, status message), or error information when an error occurs
+        /// </returns>
+        Task<StatusResponse> GetResponseAsync(StatusRequest statusRequest);
     }
 }

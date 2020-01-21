@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Xml;
 using BankId.Merchant.Library.AppConfig;
 using BankId.Merchant.Library.SampleWebsite.Models;
@@ -39,7 +40,7 @@ namespace BankId.Merchant.Library.SampleWebsite.Controllers
 
 
         [HttpPost]
-        public ActionResult Directory(DirectoryModel model)
+        public async Task<ActionResult> Directory(DirectoryModel model)
         {
             _config.AcquirerDirectoryUrl = new Uri(model.DirectoryUrl);
             _config.MerchantId = model.MerchantId;
@@ -49,7 +50,7 @@ namespace BankId.Merchant.Library.SampleWebsite.Controllers
             try
             {
                 var communicator = new Communicator(_config);
-                model.Source = communicator.GetDirectory();
+                model.Source = await communicator.GetDirectoryAsync();
             }
             catch (Exception ex)
             {
@@ -82,7 +83,7 @@ namespace BankId.Merchant.Library.SampleWebsite.Controllers
         }
 
         [HttpPost]
-        public ActionResult AuthenticationRequest(TransactionModel model)
+        public async Task<ActionResult> AuthenticationRequest(TransactionModel model)
         {
             _config.AcquirerTransactionUrl = new Uri(model.AcquirerTransactionURL);
             _config.MerchantId = model.MerchantId;
@@ -105,7 +106,7 @@ namespace BankId.Merchant.Library.SampleWebsite.Controllers
                 var transactionRequest = new AuthenticationRequest(model.EntranceCode, serviceid, model.IssuerID,
                     model.MerchantReference, assuranceLevel, time, model.Language ?? "nl", model.DocumentId);
 
-                model.Source = communicator.NewAuthenticationRequest(transactionRequest);
+                model.Source = await communicator.NewAuthenticationRequestAsync(transactionRequest);
             }
             catch (Exception ex)
             {
@@ -134,7 +135,7 @@ namespace BankId.Merchant.Library.SampleWebsite.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetResponse(StatusModel model)
+        public async Task<ActionResult>GetResponse(StatusModel model)
         {
             _config.MerchantId = model.MerchantId;
             _config.MerchantReturnUrl = model.ReturnUrl;
@@ -146,7 +147,7 @@ namespace BankId.Merchant.Library.SampleWebsite.Controllers
                 var communicator = new Communicator(_config);
 
                 var statusRequest = new StatusRequest(model.TransactionId);
-                model.Source = communicator.GetResponse(statusRequest);
+                model.Source = await communicator.GetResponseAsync(statusRequest);
             }
             catch (Exception ex)
             {

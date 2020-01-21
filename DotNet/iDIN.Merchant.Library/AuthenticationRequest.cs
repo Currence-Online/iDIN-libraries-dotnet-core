@@ -16,7 +16,7 @@ namespace BankId.Merchant.Library
         /// <summary>
         /// Constructor that highlights all required fields for this object; use this one to specify your own messageId
         /// </summary>
-        public AuthenticationRequest(string entranceCode, ServiceIds requestedServiceId, string issuerId, string merchantReference = null, 
+        public AuthenticationRequest(string entranceCode, ServiceIds requestedServiceId, string issuerId, string merchantReference = null,
             AssuranceLevel assuranceLevel = AssuranceLevel.Loa3, TimeSpan? expirationPeriod = null, string language = "nl", string merchantDocumentId = null)
         {
             if (expirationPeriod > MaxExpirationPeriod)
@@ -27,9 +27,12 @@ namespace BankId.Merchant.Library
 
             if (!String.IsNullOrEmpty(merchantDocumentId))
             {
-                if ((requestedServiceId & ServiceIds.Sign) != 0 && requestedServiceId != ServiceIds.Sign)
+                if ((requestedServiceId & ServiceIds.Sign) != 0)
                 {
-                    throw new ArgumentException("Sign cannot be combined with other services.");
+                    if ((requestedServiceId & ServiceIds.ConsumerBin) == 0)
+                    {
+                        throw new ArgumentException("ConsumerID BIN attribute should be present.");
+                    }
                 }
                 else if (requestedServiceId != ServiceIds.Sign)
                 {
@@ -52,7 +55,7 @@ namespace BankId.Merchant.Library
             AssuranceLevel = assuranceLevel;
             ExpirationPeriod = expirationPeriod;
             DocumentId = merchantDocumentId;
-        }        
+        }
 
         /// <summary>
         /// An 'authentication identifier' to facilitate continuation of the session even if the existing session has been lost.
@@ -80,7 +83,7 @@ namespace BankId.Merchant.Library
         /// This field specifies what attributes the Merchant would like to have a look at.
         /// </summary>
         public ServiceIds RequestedServiceId { get; private set; }
-        
+
         /// <summary>
         /// BIC of the Issuer
         /// </summary>
@@ -100,7 +103,8 @@ namespace BankId.Merchant.Library
         /// <summary>
         /// Represents the current time at which this authentication message is created.
         /// </summary>
-        public DateTime CreateDateTimestamp {
+        public DateTime CreateDateTimestamp
+        {
             get
             {
                 if (!_createDateTimestamp.HasValue)
@@ -112,7 +116,7 @@ namespace BankId.Merchant.Library
 
         private static string GenerateMerchantReference()
         {
-            return  ('A' + Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N")).Substring(0, 35);
+            return ('A' + Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N")).Substring(0, 35);
         }
     }
 }

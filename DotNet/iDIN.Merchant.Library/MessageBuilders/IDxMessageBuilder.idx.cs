@@ -6,8 +6,7 @@ using BankId.Merchant.Library.Xml.Schemas.iDx;
 
 namespace BankId.Merchant.Library.MessageBuilders
 {
-    // ReSharper disable once InconsistentNaming
-    internal class IDxMessageBuilder
+    internal class IDxMessageBuilder : IIDxMessageBuilder
     {
         private readonly IConfiguration _configuration;
         

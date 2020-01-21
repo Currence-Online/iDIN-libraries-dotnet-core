@@ -3,7 +3,7 @@
     /// <summary>
     /// IXmlSecurity interface: utility methods on XML files
     /// </summary>
-    internal interface IXmlSecurity
+    public interface IXmlSecurity
     {
         /// <summary>
         /// Sign the xml passed as a parameter using the certificate in Configuration.SigningCertificate

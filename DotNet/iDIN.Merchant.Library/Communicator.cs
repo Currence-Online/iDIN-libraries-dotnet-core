@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using BankId.Merchant.Library.MessageBuilders;
 using BankId.Merchant.Library.Security;
 
@@ -27,8 +29,9 @@ namespace BankId.Merchant.Library
         /// IConfiguration instance used to hold all configuration keys
         /// </summary>
         private readonly IConfiguration _configuration;
-        
-            
+
+        private readonly IIDxMessageBuilder _iDxMessageBuilder;
+
 
         /// <summary>
         /// Creates a new Communicator instance by specifing a custom configuration instance
@@ -46,8 +49,18 @@ namespace BankId.Merchant.Library
 
             _xmlSecurity = new XmlSecurity(_configuration);
 
+            _iDxMessageBuilder = new IDxMessageBuilder(_configuration);
 
             _logger.Log("communicator initialized with custom configuration");
+        }
+
+        internal Communicator(ILogger logger, IIDxMessageBuilder iDxMessageBuilder, IXmlSecurity xmlSecurity, IConfiguration configuration, IMessenger messenger)
+        {
+            _iDxMessageBuilder = iDxMessageBuilder;
+            _logger = logger;
+            _xmlSecurity = xmlSecurity;
+            _configuration = configuration;
+            _messenger = messenger;
         }
 
         #region private methods
@@ -76,10 +89,24 @@ namespace BankId.Merchant.Library
             return _xmlSecurity.VerifySchema(xml);
         }
 
+        private string PerformRequest(string xml, Uri url)
+        {
+            var task = Task.Run(() => PerformRequestAsync(xml, url));
+
+            try
+            {
+                return task.Result;
+            }
+            catch (AggregateException e)
+            {
+                throw e.InnerExceptions.First();
+            }
+        }
+
         /// <summary>
         /// Perform the http(s) request and return the result
         /// </summary>
-        private string PerformRequest(string xml, Uri url)
+        private async Task<string> PerformRequestAsync(string xml, Uri url)
         {
             _logger.Log("sending request to {0}", url);
 
@@ -95,7 +122,7 @@ namespace BankId.Merchant.Library
 
             _logger.LogXmlMessage(xml);
 
-            var content = _messenger.SendMessage(xml, url);
+            var content = await _messenger.SendMessageAsync(xml, url);
 
             _logger.LogXmlMessage(content);
 
@@ -136,7 +163,7 @@ namespace BankId.Merchant.Library
                 _logger.Log("sending new directory request");
 
                 _logger.Log("building idx message");
-                var directoryreq = new IDxMessageBuilder(_configuration).GetDirectoryRequest();
+                var directoryreq = _iDxMessageBuilder.GetDirectoryRequest();
 
                 _logger.Log("signing message");
                 var xml = Sign(directoryreq);
@@ -170,7 +197,7 @@ namespace BankId.Merchant.Library
 
                 _logger.Log("building idx message");
                 var acquirertrxreq =
-                    new IDxMessageBuilder(_configuration).GetTransactionRequest(authenticationRequest, document);
+                    _iDxMessageBuilder.GetTransactionRequest(authenticationRequest, document);
 
                 _logger.Log("signing message");
                 var xml = Sign(acquirertrxreq);
@@ -201,12 +228,105 @@ namespace BankId.Merchant.Library
 
                 _logger.Log("building idx message");
                 var acquirerstsreq =
-                    new IDxMessageBuilder(_configuration).GetStatusRequest(statusRequest);
+                    _iDxMessageBuilder.GetStatusRequest(statusRequest);
 
                 _logger.Log("signing message");
                 var xml = Sign(acquirerstsreq);
 
                 var content = PerformRequest(xml, _configuration.AcquirerStatusUrl);
+
+                return StatusResponse.Parse(content, _configuration);
+            }
+            catch (Exception e)
+            {
+                _logger.Log(e.ToString());
+                return new StatusResponse(e);
+            }
+        }
+        /// <summary>
+        ///     Sends a directory request to the URL specified in Configuration.AcquirerUrl_DirectoryReq
+        /// </summary>
+        /// <returns>
+        ///     A DirectoryResponse object which contains the response from the server (a list of Issuers), or error information when an error occurs
+        /// </returns>
+        public async Task<DirectoryResponse> GetDirectoryAsync()
+        {
+            try
+            {
+                _logger.Log("sending new directory request");
+
+                _logger.Log("building idx message");
+                var directoryRequest = _iDxMessageBuilder.GetDirectoryRequest();
+
+                _logger.Log("signing message");
+                var xml = Sign(directoryRequest);
+
+                var content = await PerformRequestAsync(xml, _configuration.AcquirerDirectoryUrl);
+
+                return DirectoryResponse.Parse(content);
+            }
+            catch (Exception e)
+            {
+                _logger.Log(e.ToString());
+                return new DirectoryResponse(e);
+            }
+        }
+
+        /// <summary>
+        ///     Sends a new authentication request to the URL specified in Configuration.AcquirerUrl_TransactionReq
+        /// </summary>
+        /// <param name="authenticationRequest">An AuthenticationRequest object</param>
+        /// <returns>
+        ///     An AuthenticationResponse object which contains the response from the server (transaction id, issuer authentication URL), or error information when an error occurs
+        /// </returns>
+        public async Task<AuthenticationResponse> NewAuthenticationRequestAsync(AuthenticationRequest authenticationRequest)
+        {
+            try
+            {
+                _logger.Log("sending new authentication request");
+
+                _logger.Log("building request");
+                var document = new BankIdMessageBuilder(_configuration).GetNewTransaction(authenticationRequest);
+
+                _logger.Log("building idx message");
+                var acquirerTransactionRequest =
+                    _iDxMessageBuilder.GetTransactionRequest(authenticationRequest, document);
+
+                _logger.Log("signing message");
+                var xml = Sign(acquirerTransactionRequest);
+
+                var content = await PerformRequestAsync(xml, _configuration.AcquirerTransactionUrl);
+
+                return AuthenticationResponse.Parse(content);
+            }
+            catch (Exception e)
+            {
+                _logger.Log(e.ToString());
+                return new AuthenticationResponse(e);
+            }
+        }
+
+        /// <summary>
+        ///     Sends a transaction status request to the URL specified in Configuration.AcquirerUrl_TransactionReq
+        /// </summary>
+        /// <param name="statusRequest">A StatusRequest object</param>
+        /// <returns>
+        ///     A StatusResponse object which contains the response from the server (transaction id, status message), or error information when an error occurs
+        /// </returns>
+        public async Task<StatusResponse> GetResponseAsync(StatusRequest statusRequest)
+        {
+            try
+            {
+                _logger.Log("sending new status request");
+
+                _logger.Log("building idx message");
+                var acquirerStatusRequest =
+                    _iDxMessageBuilder.GetStatusRequest(statusRequest);
+
+                _logger.Log("signing message");
+                var xml = Sign(acquirerStatusRequest);
+
+                var content = await PerformRequestAsync(xml, _configuration.AcquirerStatusUrl);
 
                 return StatusResponse.Parse(content, _configuration);
             }
