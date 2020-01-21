@@ -1,0 +1,140 @@
+﻿@model BankId.Merchant.Library.SampleWebsite.Models.TransactionModel
+
+@{
+    ViewBag.Title = "AuthenticationResponse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Authentication Response</h2>
+<hr />
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal" method="post" role="form">
+            <div class="form-group row">
+                <div class="col-7">
+                    @Html.Label("BankId.Acquirer.TransactionUrl", "BankId.Acquirer.TransactionUrl")
+                    @Html.TextBoxFor(m => m.AcquirerTransactionURL, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    @Html.Label("issuerID", "issuerID")
+                    @Html.TextBoxFor(m => m.IssuerID, new { @class = "form-control" })
+                </div>
+                <div class="col-3">
+                    @Html.Label("expirationPeriod", "expirationPeriod")
+                    @Html.TextBoxFor(m => m.ExpirationPeriod, new { @class = "form-control" })
+                </div>
+                <div class="col-3">
+                    @Html.Label("language", "language")
+                    @Html.DropDownListFor(m => m.Language, new SelectList(new[] { "en", "nl" }), "", new { @class = "form-control" })
+                </div>
+                <div class="col-3">
+                    @Html.Label("entranceCode", "entranceCode")
+                    @Html.TextBoxFor(m => m.EntranceCode, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    @Html.Label("BankId.MerchantReference", "BankId.MerchantReference")
+                    @Html.TextBoxFor(m => m.MerchantReference, new { @class = "form-control" })
+                </div>
+                <div class="col-3">
+                    @Html.Label("BankId.RequestedServiceId", "BankId.RequestedServiceId")
+                    @Html.TextBoxFor(m => m.RequestedServiceId, new { @class = "form-control" })
+                </div>
+                <div class="col-3">
+                    @Html.Label("BankId.LOA", "BankId.LOA")
+                    @Html.DropDownListFor(m => m.LOA, new SelectList(new[] { "nl:bvn:bankid:1.0:loa3" }), "", new { @class = "form-control" })
+                </div>
+                <div class="col-3">
+                    @Html.Label("BankId.Merchant.DocumentId", "BankId.Merchant.DocumentId")
+                    @Html.TextBoxFor(m => m.DocumentId, new { @class = "form-control" })
+                </div>
+            </div>
+            <button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#demo">Toggle more options</button>
+            <div id="demo" class="collapse">
+                <div class="form-group">
+                    <div class="col-3">
+                        @Html.Label("BankId.Merchant.MerchantID", "BankId.Merchant.MerchantID")
+                        @Html.TextBoxFor(m => m.MerchantId, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-3">
+                        @Html.Label("BankId.Merchant.SubID", "BankId.Merchant.SubID")
+                        @Html.TextBoxFor(m => m.SubId, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-3">
+                        @Html.Label("BankId.Merchant.ReturnUrl", "BankId.Merchant.ReturnUrl")
+                        @Html.TextBoxFor(m => m.ReturnUrl, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Send authentication request</button>
+        </form>
+    </div>
+</div>
+<hr />
+
+@if (!String.IsNullOrEmpty(Model.CustomError))
+{
+    <div class="row alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <p>Custom error: @Model.CustomError</p><br />
+    </div>
+}
+
+
+@if (Model.Source != null && Model.Source.IsError)
+{
+    <div class="row alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+
+        Error performing request: <br />
+        <br />
+        @if (!string.IsNullOrEmpty(Model.Source.Error.ErrorCode))
+        {
+            <text>Code: @Model.Source.Error.ErrorCode<br /></text>
+        }
+        @if (!string.IsNullOrEmpty(Model.Source.Error.ErrorMessage))
+        {
+            <text>Message: @Model.Source.Error.ErrorMessage<br /></text>
+        }
+        @if (!string.IsNullOrEmpty(Model.Source.Error.ErrorDetails))
+        {
+            <text>Details: @Model.Source.Error.ErrorDetails<br /></text>
+        }
+        @if (!string.IsNullOrEmpty(Model.Source.Error.ConsumerMessage))
+        {
+            <text>Consumer message: @Model.Source.Error.ConsumerMessage<br /></text>
+        }
+        @if (!string.IsNullOrEmpty(Model.Source.Error.SuggestedAction))
+        {
+            <text>Code: @Model.Source.Error.SuggestedAction<br /></text>
+        }
+    </div>
+}
+
+@if (Model.Source != null && !Model.Source.IsError)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <pre>IssuerAuthenticationUrl = @Model.Source.IssuerAuthenticationUrl</pre>
+            </div>
+            <div class="col-12">
+                <pre>TransactionID = @Model.Source.TransactionId</pre>
+            </div>
+            <div class="col-12">
+                <pre>TransactionCreateDateTimestamp = @Model.Source.TransactionCreateDateTimestamp</pre>
+            </div>
+        </div>    
+    </div>
+    <hr />
+    <div class="row">
+        <textarea readonly="true" class="form-control" rows="10">@Model.Source.RawMessage</textarea>
+    </div>
+}
