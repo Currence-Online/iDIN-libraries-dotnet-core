@@ -8,7 +8,7 @@ namespace BankId.Merchant.Library.Security
 {
     internal class XmlEncryption
     {
-        internal static void DecryptXml(RSACng asymmetricAlgorithm, XmlDocument xmlDoc, string[] xmlElementsXPaths)
+        internal static void DecryptXml(RSA asymmetricAlgorithm, XmlDocument xmlDoc, string[] xmlElementsXPaths)
         {
             if (asymmetricAlgorithm == null) throw new ArgumentNullException("asymmetricAlgorithm");
             if (xmlDoc == null) throw new ArgumentNullException("xmlDoc");

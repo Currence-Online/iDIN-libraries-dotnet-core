@@ -139,27 +139,21 @@ namespace BankId.Merchant.Library.Security
 
             X509Certificate2 incomingCertificate = null;
 
-            foreach (object o in signedXml.KeyInfo)
+            foreach (var keyInfo in signedXml.KeyInfo.OfType<KeyInfoName>())
             {
-                dynamic clause = (KeyInfoClause)o;
-                Type t = clause.GetType();
-                Debug.Assert(_configuration.RoutingServiceCertificate.Thumbprint != null, "_configuration.RoutingServiceCertificate.Thumbprint != null");
-                var hasValueProperty = t.GetProperties().Any(p => p.Name.Equals("Value"));
-                if (hasValueProperty)
+                var keyInfoValue = keyInfo.Value;
+
+                if (!string.IsNullOrEmpty(keyInfoValue))
                 {
-                    var keyInfoValue = clause.Value;
-                    if (!string.IsNullOrEmpty(keyInfoValue))
+                    if (string.Compare(keyInfoValue, _configuration.RoutingServiceCertificate.Thumbprint, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        if (string.Compare(keyInfoValue, _configuration.RoutingServiceCertificate.Thumbprint, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            incomingCertificate = _configuration.RoutingServiceCertificate;
-                            break;
-                        }
-                        if (string.Compare(keyInfoValue, _configuration.AlternateRoutingServiceCertificate?.Thumbprint, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            incomingCertificate = _configuration.AlternateRoutingServiceCertificate;
-                            break;
-                        }
+                        incomingCertificate = _configuration.RoutingServiceCertificate;
+                        break;
+                    }
+                    if (string.Compare(keyInfoValue, _configuration.AlternateRoutingServiceCertificate?.Thumbprint, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        incomingCertificate = _configuration.AlternateRoutingServiceCertificate;
+                        break;
                     }
                 }
             }
