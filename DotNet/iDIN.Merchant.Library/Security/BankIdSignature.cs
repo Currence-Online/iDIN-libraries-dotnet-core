@@ -6,14 +6,14 @@ using System.Xml;
 namespace BankId.Merchant.Library.Security
 {
     internal class BankIdSignature
-    {        
+    {
         private readonly ILogger _logger;
 
         internal BankIdSignature(IConfiguration configuration)
         {
             XmlSignature.RegisterSignatureAlghorighm();
             _logger = configuration.GetLogger();
-        }        
+        }
 
         private static bool IsEligibleForBankIdSignature(XmlDocument doc)
         {
@@ -28,7 +28,7 @@ namespace BankId.Merchant.Library.Security
 
             return false;
         }
-      
+
         /// <summary>
         /// Tries to verify the specified XML text signature.
         /// </summary>
@@ -38,7 +38,7 @@ namespace BankId.Merchant.Library.Security
         /// <param name="isValidSignature">True if the signature is valid and placed properly, false otherwise.</param>
         /// <returns>True if the verifying was possible, false otherwise.</returns>
         public bool TryVerifyElement(string xmlText, string elementName, string elementNamespace, out bool isValidSignature)
-        {            
+        {
             _logger.Log("Debug: TryVerifyElement, xml={0}, elname={1}", xmlText, elementName);
 
             isValidSignature = false;

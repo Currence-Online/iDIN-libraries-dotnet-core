@@ -79,9 +79,17 @@ namespace BankId.Merchant.Library.AdvancedConfiguration
 
         private void Write(LogLevel level, MethodBase mi, string message, params object[] args)
         {
+            var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
             var str = string.Format(message, args);
             var method = mi.DeclaringType.Name + "." + mi.Name + "()";
-            str = string.Format("{0} [{1}] [{2}] {3} - {4}", DateTime.Now.ToString("O"), Thread.CurrentThread.ManagedThreadId.ToString().PadLeft(4), level.ToString().PadLeft(5), method, str);
+            str = string.Format("{0} [{1}] [{2}] [v{5}] {3} - {4}",
+                DateTime.Now.ToString("O"),
+                Thread.CurrentThread.ManagedThreadId.ToString().PadLeft(4),
+                level.ToString().PadLeft(5),
+                method,
+                str,
+                assemblyVersion);
 
             Trace.WriteLine(str);
         }
