@@ -1,4 +1,8 @@
 Release Notes BankId.Merchant.Library
 	
+v 1.0.1
+#128248: COT-526: Add the library version in the logs
+Add support for Linux
+
 v 1.0.0 (migration made using "iDIN-libraries-dotnet" .Net Framework library v1.2.2 as a starting point)
 #121312 Create iDIN .NET Core Software Library

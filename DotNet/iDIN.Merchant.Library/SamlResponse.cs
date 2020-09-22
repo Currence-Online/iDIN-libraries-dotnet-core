@@ -154,7 +154,7 @@ namespace BankId.Merchant.Library
             try
             {
                 XmlEncryption.DecryptXml(
-                    (RSACng)configuration.SamlCertificate.GetRSAPrivateKey(),
+                    configuration.SamlCertificate.GetRSAPrivateKey(),
                     samlXml,
                     new[] { "//*[local-name() = 'EncryptedID']", "//*[local-name() = 'EncryptedAttribute']" });
             }

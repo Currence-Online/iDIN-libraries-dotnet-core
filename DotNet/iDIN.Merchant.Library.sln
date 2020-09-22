@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.489
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankId.Merchant.Library", "iDIN.Merchant.Library\BankId.Merchant.Library.csproj", "{5AC6AE9E-A731-42D4-8699-472E2F59A2C8}"
 EndProject
