@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Xml;
 
 namespace BankId.Merchant.Library.Security
@@ -81,7 +81,7 @@ namespace BankId.Merchant.Library.Security
             var x509Data = XmlSignature.GetElementUnderRoot(keyInfo as XmlElement, "X509Data");
             var x509Certificate = XmlSignature.GetElementUnderRoot(x509Data as XmlElement, "X509Certificate");
 
-            var certificate = Encoding.Unicode.GetBytes(x509Certificate.InnerText);
+            var certificate = Convert.FromBase64String(x509Certificate.InnerText);
             var cert = new X509Certificate2(certificate);
 
             isValidSignature = XmlSignature.CheckSignature(xmlElementDoc, cert, GetBankIdSignatureElement(xmlElementDoc.DocumentElement));
