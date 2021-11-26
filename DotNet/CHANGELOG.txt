@@ -1,5 +1,8 @@
 Release Notes BankId.Merchant.Library
-	
+
+v 1.0.3
+#139996: COT-707: Update iDIN .Net Core Library to ensure .Net Core 5 compatibility
+
 v 1.0.2
 #130430: iDIN Signing extension - The library publishes the intermediate symmetric keys for each of the attributes
 
