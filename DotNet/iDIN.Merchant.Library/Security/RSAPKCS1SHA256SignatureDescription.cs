@@ -83,7 +83,7 @@ namespace BankId.Merchant.Library.Security
         /// </summary>
         public RSAPKCS1SHA256SignatureDescription()
         {
-            KeyAlgorithm = typeof(RSACryptoServiceProvider).FullName;
+            KeyAlgorithm = typeof(RSACryptoServiceProvider).AssemblyQualifiedName;
             DigestAlgorithm = typeof(SHA256Managed).FullName;   // Note - SHA256CryptoServiceProvider is not registered with CryptoConfig
             FormatterAlgorithm = typeof(RSAPKCS1SignatureFormatter).FullName;
             DeformatterAlgorithm = typeof(RSAPKCS1SignatureDeformatter).FullName;
