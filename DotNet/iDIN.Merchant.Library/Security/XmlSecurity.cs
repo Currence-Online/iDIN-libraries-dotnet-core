@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -163,8 +163,7 @@ namespace BankId.Merchant.Library.Security
                 _logger.Log("the certificate used for signing is not the same as the one in the configuration");
                 return false;
             }
-
-            if (!signedXml.CheckSignature(incomingCertificate, true))
+            if (!XmlSignature.CheckSignature(document, incomingCertificate, signature))
             {
                 _logger.Log("signature is not valid");
                 return false;

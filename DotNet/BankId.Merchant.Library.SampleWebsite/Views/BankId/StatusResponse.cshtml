@@ -1,9 +1,12 @@
-﻿@using BankId.Merchant.Library
+@using BankId.Merchant.Library
+
 @model BankId.Merchant.Library.SampleWebsite.Models.StatusModel
 
 @{
     ViewBag.Title = "Response";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    Func<dynamic, object> attributeStatementsTemplate = @<pre>@item.Name = @item.Value</pre>;
+
 }
 
 <h2>Response</h2>
@@ -116,13 +119,14 @@
         </div>
         <hr />
         <p>Attributes:</p>
+        
         <div class="row">
             @if (Model.Source.SamlResponse != null && Model.Source.SamlResponse.AttributeStatements.Count > 0)
             {
-                foreach (var attribute in Model.Source.SamlResponse.AttributeStatements)
+                @foreach (var attribute in Model.Source.SamlResponse.AttributeStatements)
                 {
                     <div class="col-12">
-                        <pre>@attribute.Name = @attribute.Value</pre>
+                        @attributeStatementsTemplate(@attribute)
                     </div>
                 }
             }

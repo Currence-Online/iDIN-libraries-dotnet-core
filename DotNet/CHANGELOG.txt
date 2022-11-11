@@ -1,4 +1,6 @@
 Release Notes BankId.Merchant.Library
+v 1.0.4
+#143764: Adjust library to ensure .net 6 compatability
 
 v 1.0.3
 #139996: COT-707: Update iDIN .Net Core Library to ensure .Net Core 5 compatibility

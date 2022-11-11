@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using BankId.Merchant.Library.AppConfig;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,11 +34,12 @@ namespace BankId.Merchant.Library.SampleWebsite
             services.AddMvc(options => options.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddMvcCore()
-                .AddJsonOptions(options =>
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Insert(0, new DecimalModelBinder());
                 });
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddOptions();
             services.Configure<ApplicationSettings>(Configuration.GetSection("iDIN.Merchant.Library.Settings"));
         }
