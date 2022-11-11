@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using System.Xml;
 using BankId.Merchant.Library.AppConfig;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace BankId.Merchant.Library.SampleWebsite.Controllers
 {
-    public class BankIdController : Controller
+    public class BankIdController : Microsoft.AspNetCore.Mvc.Controller
     {
         private IConfiguration _config;
 
@@ -18,14 +18,14 @@ namespace BankId.Merchant.Library.SampleWebsite.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public Microsoft.AspNetCore.Mvc.ActionResult Index()
         {
             return View("Directory");
         }
 
         #region Directory
         [HttpGet]
-        public ActionResult Directory()
+        public Microsoft.AspNetCore.Mvc.ActionResult Directory()
         {
             var model = new DirectoryModel
             {
@@ -40,7 +40,7 @@ namespace BankId.Merchant.Library.SampleWebsite.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> Directory(DirectoryModel model)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Directory(DirectoryModel model)
         {
             _config.AcquirerDirectoryUrl = new Uri(model.DirectoryUrl);
             _config.MerchantId = model.MerchantId;
@@ -63,7 +63,7 @@ namespace BankId.Merchant.Library.SampleWebsite.Controllers
 
         #region AuthenticationRequest
         [HttpGet]
-        public ActionResult AuthenticationRequest()
+        public Microsoft.AspNetCore.Mvc.ActionResult AuthenticationRequest()
         {
             var model = new TransactionModel
             {
@@ -83,7 +83,7 @@ namespace BankId.Merchant.Library.SampleWebsite.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AuthenticationRequest(TransactionModel model)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> AuthenticationRequest(TransactionModel model)
         {
             _config.AcquirerTransactionUrl = new Uri(model.AcquirerTransactionURL);
             _config.MerchantId = model.MerchantId;
@@ -120,7 +120,7 @@ namespace BankId.Merchant.Library.SampleWebsite.Controllers
 
         #region GetResponse
         [HttpGet]
-        public ActionResult GetResponse()
+        public Microsoft.AspNetCore.Mvc.ActionResult GetResponse()
         {
             var model = new StatusModel
             {
@@ -135,7 +135,7 @@ namespace BankId.Merchant.Library.SampleWebsite.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult>GetResponse(StatusModel model)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> GetResponse(StatusModel model)
         {
             _config.MerchantId = model.MerchantId;
             _config.MerchantReturnUrl = model.ReturnUrl;
