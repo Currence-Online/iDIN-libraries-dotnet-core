@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -143,7 +143,7 @@ namespace BankId.Merchant.Library.Security
             var signedXml = new SignedXml(xmlDocument);
             signedXml.LoadXml(signEl);
 
-            if (signedXml.CheckSignature(rsaKey))
+            if (signedXml.CheckSignature(certificate, true))
             {
                 return AlgorithmsRegexEnvelopedSignature.All(regex => regex.IsMatch(signEl.InnerXml));
             }
