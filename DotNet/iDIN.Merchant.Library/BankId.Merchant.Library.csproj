@@ -1,9 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <DocumentationFile>BankId.Merchant.Library.xml</DocumentationFile>
-    <Version>1.0.4</Version>
+    <Version>1.0.6</Version>
+	  <PackageId>iDIN.Merchant.Library</PackageId>
+	  <RepositoryUrl>https://github.com/Currence-Online/iDIN-libraries-dotnet-core</RepositoryUrl>
+	  <Authors>maxcode-devops-blue</Authors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -33,11 +36,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
-    <PackageReference Include="System.Security.Cryptography.Cng" Version="4.5.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.0" />
+    <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" />
     <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="4.5.0" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.0" />
   </ItemGroup>
 
 </Project>

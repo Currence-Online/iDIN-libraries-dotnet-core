@@ -1,4 +1,6 @@
 Release Notes BankId.Merchant.Library
+v.1.0.6
+Adjust library to ensure .net 8 compatibility + adjust sample website
 v 1.0.4
 #143764: Adjust library to ensure .net 6 compatability
 

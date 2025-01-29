@@ -1,5 +1,6 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using BankId.Merchant.Library.AppConfig;
+using BankId.Merchant.Library.SampleWebsite.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,7 @@ namespace BankId.Merchant.Library.SampleWebsite
         
 
         public Microsoft.Extensions.Configuration.IConfiguration Configuration { get; }
+        private AdvancedApplicationSettings AdvancedApplicationSettings { get; set; } = new AdvancedApplicationSettings();
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -53,7 +55,7 @@ namespace BankId.Merchant.Library.SampleWebsite
             }
 
             app.UseStaticFiles();
-            app.UseHttpsRedirection();
+            app.UseHttpsRedirection(); 
 
             app.UseMvc(routes =>
             {
@@ -62,9 +64,16 @@ namespace BankId.Merchant.Library.SampleWebsite
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+             Configuration.GetRequiredSection(nameof(AdvancedApplicationSettings)).Bind(AdvancedApplicationSettings);
 
-            //Trace.Listeners.Add(new CustomTraceListener(env.WebRootPath));
-            Trace.Listeners.Add(new CustomTraceListener(_contentRoot));
+            if (!string.IsNullOrEmpty(AdvancedApplicationSettings.AppLogsLocation))
+            {
+                Trace.Listeners.Add(new CustomTraceListener(AdvancedApplicationSettings.AppLogsLocation));
+            }
+            else
+            {
+                Trace.Listeners.Add(new CustomTraceListener(_contentRoot));
+            }
         }
     }
 }
