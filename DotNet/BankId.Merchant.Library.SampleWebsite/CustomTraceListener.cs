@@ -5,17 +5,18 @@ namespace BankId.Merchant.Library.SampleWebsite
 {
     public class CustomTraceListener : TraceListener
     {
-        private readonly string _webRootPath;
+        private readonly string _webPath;
 
-        public CustomTraceListener(string webRootPath) : base()
+        public CustomTraceListener(string webPath) : base()
         {
-            _webRootPath = webRootPath;
+            _webPath = webPath;
         }
         public override void Write(string message)
         {
             lock(this)
             {
-                using (var sw = new StreamWriter(Path.Combine(_webRootPath, "logs/info-log.txt"), true))
+                string logFilePath = Path.Combine(_webPath, "info-log.txt");
+                using (StreamWriter sw = (File.Exists(logFilePath)) ? File.AppendText(logFilePath) : File.CreateText(logFilePath))
                 {
                     sw.WriteLine(message);
                 }
@@ -26,7 +27,8 @@ namespace BankId.Merchant.Library.SampleWebsite
         {
             lock (this)
             {
-                using (var sw = new StreamWriter(Path.Combine(_webRootPath, "logs/info-log.txt"), true))
+                string logFilePath = Path.Combine(_webPath, "info-log.txt");
+                using (StreamWriter sw = (File.Exists(logFilePath)) ? File.AppendText(logFilePath) : File.CreateText(logFilePath))
                 {
                     sw.WriteLine(message);
                 }
